@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kid_good_good/kid/constants.dart';
 import 'package:kid_good_good/kid/kid.dart';
 
+import '../../../constants.dart';
 import '../reward.dart';
 
 class AddToCart extends StatelessWidget {
@@ -17,7 +17,7 @@ class AddToCart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: kDefaultPaddin),
+      padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
       child: FractionallySizedBox(
         heightFactor: .7,
         child: Column(

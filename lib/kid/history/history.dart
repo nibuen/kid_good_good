@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:kid_good_good/constants.dart';
 import 'package:kid_good_good/kid/reward/reward.dart';
 
 import '../../app_bar.dart';
@@ -70,7 +71,7 @@ class PointHistoryList extends ConsumerWidget {
   }
 }
 
-@HiveType(typeId: 1)
+@HiveType(typeId: HistoryTypeId)
 class PointHistory {
   const PointHistory({
     required this.points,

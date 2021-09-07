@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import 'kid/kid.dart';
+import '../kid.dart';
 
 class PointSelector extends StatefulWidget {
   const PointSelector({

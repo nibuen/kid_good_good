@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_good_good/kid/reward/cart/add_to_cart.dart';
 import 'package:kid_good_good/kid/reward/reward.dart';
+import 'package:kid_good_good/widgets/loading_image.dart';
 
 import '../../app_bar.dart';
 import '../kid.dart';
@@ -147,7 +148,8 @@ class _RewardCard extends ConsumerWidget {
           children: [
             if (reward.imageUrl != null)
               Positioned.fill(
-                  child: Image.network(reward.imageUrl!, fit: BoxFit.cover)),
+                child: LoadingImage(url: reward.imageUrl!),
+              ),
             Positioned.fill(
               child: Card(
                 margin: EdgeInsets.all(8),

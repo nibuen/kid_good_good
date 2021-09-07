@@ -39,12 +39,16 @@ class _KidAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    return CircleAvatar(
-      foregroundColor: Colors.deepOrange,
-      child: watch(selectedKidProvider).when(
-        data: (kid) => Text("${kid.firstName}"),
-        loading: () => Icon(Icons.new_label),
-        error: (_, __) => Icon(Icons.error),
+
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, "user_select"),
+      child: CircleAvatar(
+        foregroundColor: Colors.deepOrange,
+        child: watch(selectedKidProvider).when(
+          data: (kid) => Text("${kid.firstName}"),
+          loading: () => Icon(Icons.new_label),
+          error: (_, __) => Icon(Icons.error),
+        ),
       ),
     );
   }

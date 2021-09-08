@@ -3,3 +3,5 @@ const int HistoryTypeId = 1;
 const int KidsTypeId = 2;
 
 const kDefaultPadding = 20.0;
+
+const hiveBoxName = "KidGoodGoodV1";

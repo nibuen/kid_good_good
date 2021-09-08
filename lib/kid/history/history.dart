@@ -49,25 +49,34 @@ class PointHistoryList extends ConsumerWidget {
     final history = kid.pointHistory;
 
     return ListView.separated(
-        itemBuilder: (context, index) {
-          final item = history[index];
-          final rewardName = item.reward?.name;
-          return ListTile(
-            leading: rewardName != null ? Text("$rewardName") : null,
-            title: Text(
-                "${DateFormat.EEEE().format(item.dateTime)} : ${item.points} Points"),
-            subtitle: Text(
-              "${DateFormat.yMMMd().format(item.dateTime)}",
-            ),
-            trailing: IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {},
-            ),
-          );
-        },
-        separatorBuilder: (context, index) =>
-            index == 0 ? Divider() : Divider(),
-        itemCount: history.length);
+      itemBuilder: (context, index) {
+        final item = history[index];
+        final rewardName = item.reward?.name;
+        return ListTile(
+          leading: rewardName != null ? Text("$rewardName") : null,
+          title: Text(
+              "${DateFormat.EEEE().format(item.dateTime)} : ${item.points} Points"),
+          subtitle: Text(
+            "${DateFormat.yMMMd().format(item.dateTime)}",
+          ),
+          trailing: ButtonBar(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.redAccent),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        );
+      },
+      separatorBuilder: (context, index) => index == 0 ? Divider() : Divider(),
+      itemCount: history.length,
+    );
   }
 }
 

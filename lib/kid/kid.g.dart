@@ -16,7 +16,7 @@ class KidsAdapter extends TypeAdapter<Kids> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Kids()..kids = (fields[0] as List).cast<Kid>();
+    return Kids()..kids = (fields[0] as List).cast<KidHive>();
   }
 
   @override
@@ -38,31 +38,31 @@ class KidsAdapter extends TypeAdapter<Kids> {
           typeId == other.typeId;
 }
 
-class KidAdapter extends TypeAdapter<Kid> {
+class KidHiveAdapter extends TypeAdapter<KidHive> {
   @override
   final int typeId = 0;
 
   @override
-  Kid read(BinaryReader reader) {
+  KidHive read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Kid(
+    return KidHive(
       firstName: fields[2] as String,
       lastName: fields[3] as String?,
       registered: fields[4] as bool,
     )
-      .._points = fields[0] as int
+      ..points = fields[0] as int
       ..pointHistory = (fields[1] as List).cast<PointHistory>();
   }
 
   @override
-  void write(BinaryWriter writer, Kid obj) {
+  void write(BinaryWriter writer, KidHive obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj._points)
+      ..write(obj.points)
       ..writeByte(1)
       ..write(obj.pointHistory)
       ..writeByte(2)
@@ -79,7 +79,7 @@ class KidAdapter extends TypeAdapter<Kid> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is KidAdapter &&
+      other is KidHiveAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -6,8 +6,10 @@ class KidSummary extends StatelessWidget {
   KidSummary({
     Key? key,
     required this.kid,
+    this.icon = Icons.person,
   }) : super(key: key);
 
+  final IconData icon;
   final Kid kid;
 
   @override
@@ -17,11 +19,18 @@ class KidSummary extends StatelessWidget {
       margin: EdgeInsets.all(8),
       elevation: 2.5,
       child: ListTile(
-        leading: Icon(Icons.person),
+        leading: Icon(icon),
         title: Text(
           kid.firstName,
         ),
         subtitle: kid.lastName != null ? Text(kid.lastName!) : null,
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.star),
+            Text("${kid.points}"),
+          ],
+        ),
       ),
     );
   }

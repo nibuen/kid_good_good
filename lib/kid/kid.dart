@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:kid_good_good/kid/reward/reward.dart';
@@ -17,24 +16,37 @@ final boxKidsProvider = Provider<Kids>((ref) {
 });
 
 final kidsProvider = StateNotifierProvider<KidsState, Kids>(
-    (ref) => KidsState(ref.read(boxKidsProvider)));
+  (ref) => KidsState(ref.watch(boxKidsProvider)),
+);
+
+final selectedKidsProvider = StateNotifierProvider<Kid, KidHive>(
+  (ref) {
+    final provider = ref.watch(kidsProvider);
+    final selectedIndex = provider.selectedKidIndex;
+    if (selectedIndex > -1 && selectedIndex < provider.kids.length) {
+      return Kid(provider.kids[selectedIndex], ref.read);
+    } else
+      return Kid(KidHive(firstName: "Unknown"), ref.read);
+  },
+);
 
 class KidRepository {
   KidRepository(this._read);
 
   final Reader _read;
 
-  void add(Kid kid) {
+  void add(KidHive kid) {
     select(kid);
-    _read(kidsProvider.notifier).add(kid);
+    final kids = _read(kidsProvider.notifier);
+    kids.add(kid);
+    kids.select(kids.length - 1); // select one just added
     _read(kidsProvider).save();
     //final notifier = _read(kidsProvider.notifier);
-
     //final box = _read(boxProvider);
     //final kids = box.get(KidsTypeId, defaultValue: Kids()) as Kids;
   }
 
-  select(Kid kid) {
+  select(KidHive kid) {
     _read(boxProvider).put(SelectedKidTypeId, kid);
     kid.save();
   }
@@ -43,40 +55,81 @@ class KidRepository {
 class KidsState extends StateNotifier<Kids> {
   KidsState(Kids kids) : super(kids);
 
-  void add(Kid kid) {
+  void add(KidHive kid) {
     state = state..kids.add(kid);
+  }
+
+  int get length => state.kids.length;
+
+  void select(int index) {
+    state = state..selectedKidIndex = index;
   }
 }
 
 @HiveType(typeId: KidsTypeId)
 class Kids with HiveObjectMixin {
   @HiveField(0)
-  List<Kid> kids = [];
+  List<KidHive> kids = [];
+
+  @HiveField(1)
+  int selectedKidIndex = -1;
+}
+
+class Kid extends StateNotifier<KidHive> {
+  Kid(KidHive kid, this._read) : super(kid);
+
+  final Reader _read;
+
+  int get points => state.points;
+
+  String get firstName => state.firstName;
+
+  String? get lastName => state.lastName;
+
+  bool get registered => state.registered;
+
+  List<PointHistory> get pointHistory => state.pointHistory;
+
+  set points(int value) {
+    state.pointHistory.add(
+        PointHistory(dateTime: DateTime.now(), points: value - state.points));
+    state = state..points = value;
+    _read(kidsProvider).save();
+  }
+
+  bool claimReward(Reward reward) {
+    if (points >= reward.cost) {
+      points -= reward.cost;
+      state = state
+        ..pointHistory.add(
+          PointHistory(
+            dateTime: DateTime.now(),
+            points: -reward.cost,
+            reward: reward,
+          ),
+        );
+      _read(kidsProvider).save();
+      return true;
+    }
+
+    //state = state;
+    return false;
+  }
 }
 
 @HiveType(typeId: SelectedKidTypeId)
-class Kid extends ChangeNotifier with HiveObjectMixin {
-  Kid({
+class KidHive with HiveObjectMixin {
+  KidHive({
     required this.firstName,
     this.lastName,
     this.registered = true,
   });
 
   @HiveField(0)
-  int _points = 0;
-
-  int get points => _points;
+  int points = 0;
 
   @HiveField(1)
   List<PointHistory> pointHistory = [];
-
-  set points(int value) {
-    pointHistory
-        .add(PointHistory(dateTime: DateTime.now(), points: value - _points));
-    _points = value;
-    notifyListeners();
-    save();
-  }
 
   @HiveField(2)
   String firstName;
@@ -86,21 +139,4 @@ class Kid extends ChangeNotifier with HiveObjectMixin {
 
   @HiveField(4)
   bool registered;
-
-  bool claimReward(Reward reward) {
-    if (points >= reward.cost) {
-      _points -= reward.cost;
-      pointHistory.add(
-        PointHistory(
-          dateTime: DateTime.now(),
-          points: -reward.cost,
-          reward: reward,
-        ),
-      );
-      notifyListeners();
-      return true;
-    }
-
-    return false;
-  }
 }

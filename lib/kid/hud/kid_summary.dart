@@ -16,10 +16,15 @@ class KidSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).secondaryHeaderColor,
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       elevation: 2.5,
       child: ListTile(
-        leading: Icon(icon),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(icon),
+          ],
+        ),
         title: Text(
           kid.firstName,
         ),
@@ -27,7 +32,19 @@ class KidSummary extends StatelessWidget {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.star),
+            Container(
+              padding: const EdgeInsets.only(bottom: 4),
+                child: Icon(Icons.star, color: Colors.indigoAccent),
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: -1,
+                      blurRadius: 6,
+                      offset: Offset(0, 0), // changes position of shadow
+                    ),
+                  ],
+                )),
             Text("${kid.points}"),
           ],
         ),

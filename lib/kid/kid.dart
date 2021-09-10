@@ -26,9 +26,10 @@ final selectedKidsProvider = StateNotifierProvider<Kid, KidHive>(
     if (selectedIndex > -1 && selectedIndex < provider.kids.length) {
       return Kid(provider.kids[selectedIndex], ref.read);
     } else
-      return Kid(KidHive(firstName: "Unknown"), ref.read);
+      return Kid(KidHive(firstName: "Unknown", registered: false), ref.read);
   },
 );
+
 
 class KidRepository {
   KidRepository(this._read);
@@ -50,6 +51,13 @@ class KidRepository {
     _read(boxProvider).put(SelectedKidTypeId, kid);
     kid.save();
   }
+
+  bool removeSelectedKid() {
+    final kids = _read(kidsProvider.notifier);
+    final changed = kids.remove(_read(selectedKidsProvider));
+    if (changed) kids.save();
+    return changed;
+  }
 }
 
 class KidsState extends StateNotifier<Kids> {
@@ -59,10 +67,20 @@ class KidsState extends StateNotifier<Kids> {
     state = state..kids.add(kid);
   }
 
+  bool remove(KidHive kid) {
+    bool changed = state.kids.remove(kid);
+    state = state;
+    return changed;
+  }
+
   int get length => state.kids.length;
 
   void select(int index) {
     state = state..selectedKidIndex = index;
+  }
+
+  void save() {
+    state.save();
   }
 }
 
@@ -82,6 +100,13 @@ class Kid extends StateNotifier<KidHive> {
 
   int get points => state.points;
 
+  set points(int value) {
+    state.pointHistory.add(
+        PointHistory(dateTime: DateTime.now(), points: value - state.points));
+    state = state..points = value;
+    _read(kidsProvider).save();
+  }
+
   String get firstName => state.firstName;
 
   String? get lastName => state.lastName;
@@ -89,13 +114,6 @@ class Kid extends StateNotifier<KidHive> {
   bool get registered => state.registered;
 
   List<PointHistory> get pointHistory => state.pointHistory;
-
-  set points(int value) {
-    state.pointHistory.add(
-        PointHistory(dateTime: DateTime.now(), points: value - state.points));
-    state = state..points = value;
-    _read(kidsProvider).save();
-  }
 
   bool claimReward(Reward reward) {
     if (points >= reward.cost) {
@@ -115,6 +133,16 @@ class Kid extends StateNotifier<KidHive> {
     //state = state;
     return false;
   }
+
+  void deleteHistory(PointHistory item) {
+    if (pointHistory.remove(item)) {
+      // go directly to inner state so we don't add to history
+      state.points -= item.points;
+      _read(kidsProvider).save();
+      state = state;
+    }
+  }
+
 }
 
 @HiveType(typeId: SelectedKidTypeId)

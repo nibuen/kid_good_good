@@ -68,7 +68,9 @@ class PointHistoryList extends ConsumerWidget {
               ),
               IconButton(
                 icon: Icon(Icons.delete, color: Colors.redAccent),
-                onPressed: () {},
+                onPressed: () {
+                  kid.deleteHistory(item);
+                },
               ),
             ],
           ),

@@ -46,16 +46,26 @@ class App extends StatelessWidget {
       routes: {
         '/rewards': (c) {
           return RewardsPage(
-              title: 'Buy Rewards', kid: c.read(selectedKidsProvider.notifier));
+            title: 'Buy Rewards',
+            kid: c.read(selectedKidsProvider.notifier),
+          );
         },
         '/history': (c) {
-          return HistoryPage(
-              title: 'Kid History', kid: c.read(selectedKidsProvider.notifier));
+          return Consumer(
+            builder: (_, watch, __) {
+              watch(selectedKidsProvider);
+              return HistoryPage(
+                title: 'Kid History',
+                kid: c.read(selectedKidsProvider.notifier),
+              );
+            },
+          );
         },
         '/register_kid': (c) {
           return RegisterKidPage(
-              title: 'Register New Child',
-              kid: c.read(selectedKidsProvider.notifier));
+            title: 'Register New Child',
+            kid: c.read(selectedKidsProvider.notifier),
+          );
         },
       },
     );
@@ -124,24 +134,44 @@ class KidsPointerList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    watch(selectedKidsProvider); // TODO This helps selected kid update correctly, should narrow rebuild
+    // TODO This helps selected kid update correctly, should narrow rebuild
+    watch(selectedKidsProvider);
     final kidsHive = watch(kidsProvider);
     final kids = kidsHive.kids;
     final selectedIndex = kidsHive.selectedKidIndex;
     //debugPrint("$kids with $selectedIndex");
 
     return ListView.builder(
-      itemBuilder: (context, index) => index != selectedIndex
-          ? GestureDetector(
-              onTap: () => context.read(kidsProvider.notifier).select(index),
-              child: KidSummary(
-                kid: Kid(kids[index], context.read),
-              ),
-            )
-          : KidSummary(
-              kid: Kid(kids[index], context.read),
-              icon: Icons.check,
+      itemBuilder: (context, index) => GestureDetector(
+        onTap: () => context.read(kidsProvider.notifier).select(index),
+        onLongPress: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: Text("${kids[index].firstName} Options"),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.delete, color: Colors.redAccent),
+                  onPressed: () {
+                    context.read(repositoryProvider).removeSelectedKid();
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                //ElevatedButton()
+              ],
             ),
+          );
+        },
+        child: KidSummary(
+          kid: Kid(kids[index], context.read),
+          icon: selectedIndex == index ? Icons.check : Icons.person,
+        ),
+      ),
       itemCount: kids.length,
     );
   }

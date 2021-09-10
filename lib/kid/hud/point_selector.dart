@@ -18,7 +18,7 @@ class PointSelector extends StatefulWidget {
 }
 
 class _PointSelectorState extends State<PointSelector> {
-  late int _currentValue;
+  int _currentValue = 0;
 
   @override
   void initState() {
@@ -30,18 +30,38 @@ class _PointSelectorState extends State<PointSelector> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        NumberPicker(
-          axis: Axis.horizontal,
-          value: _currentValue,
-          minValue: 0,
-          maxValue: 40,
-          onChanged: (value) => setState(() => _currentValue = value),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Card(
+                elevation: 3.5,
+                color: Colors.blueGrey[100],
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: NumberPicker(
+                    axis: Axis.horizontal,
+                    value: _currentValue,
+                    minValue: 0,
+                    maxValue: 40,
+                    onChanged: (value) => setState(() => _currentValue = value),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.black26),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         Divider(),
-        FloatingActionButton(
+        FloatingActionButton.small(
           onPressed: () => widget.kid.points += _currentValue,
           tooltip: 'Add Points',
-          child: Icon(Icons.check),
+          child: Icon(Icons.add),
         ),
       ],
     );

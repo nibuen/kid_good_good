@@ -20,19 +20,21 @@ class SelectedKidPointer extends ConsumerWidget {
               child: Column(
                 children: [
                   Text(
-                    kid.firstName,
+                    '${kid.firstName} ${kid.lastName}',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   PointSelector(
                     initialValue: 20,
                     kid: kid,
-                  ),
+                  )
                 ],
               ),
             ),
           )
-        : Card(
-            child: KidSignupForm(),
+        : Text(
+            "Select or Add a Child Below",
+            style: Theme.of(context).textTheme.headline4,
+            textAlign: TextAlign.center,
           );
   }
 }

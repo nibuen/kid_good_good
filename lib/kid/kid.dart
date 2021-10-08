@@ -30,7 +30,6 @@ final selectedKidsProvider = StateNotifierProvider<Kid, KidHive>(
   },
 );
 
-
 class KidRepository {
   KidRepository(this._read);
 
@@ -107,6 +106,12 @@ class Kid extends StateNotifier<KidHive> {
     _read(kidsProvider).save();
   }
 
+  void addPointsAtTime(int value, DateTime dateTime) {
+    state.pointHistory.add(PointHistory(dateTime: dateTime, points: value));
+    state = state..points += value;
+    _read(kidsProvider).save();
+  }
+
   String get firstName => state.firstName;
 
   String? get lastName => state.lastName;
@@ -142,7 +147,6 @@ class Kid extends StateNotifier<KidHive> {
       state = state;
     }
   }
-
 }
 
 @HiveType(typeId: SelectedKidTypeId)

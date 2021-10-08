@@ -8,10 +8,13 @@ class PointSelector extends StatefulWidget {
     Key? key,
     required this.initialValue,
     required this.kid,
+    this.dateTime,
   }) : super(key: key);
 
   final int initialValue;
   final Kid kid;
+
+  final DateTime? dateTime;
 
   @override
   _PointSelectorState createState() => _PointSelectorState();
@@ -42,7 +45,7 @@ class _PointSelectorState extends State<PointSelector> {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: NumberPicker(
-                    axis: Axis.horizontal,
+                    axis: Axis.vertical,
                     value: _currentValue,
                     minValue: 0,
                     maxValue: 40,
@@ -57,11 +60,17 @@ class _PointSelectorState extends State<PointSelector> {
             ],
           ),
         ),
-        Divider(),
+        SizedBox(height: 12),
         FloatingActionButton.small(
-          onPressed: () => widget.kid.points += _currentValue,
+          onPressed: () {
+            if(widget.dateTime == null) {
+              widget.kid.points += _currentValue;
+            } else {
+              widget.kid.addPointsAtTime(_currentValue, widget.dateTime!);
+            }
+          },
           tooltip: 'Add Points',
-          child: Icon(Icons.add),
+          child: Icon(Icons.check),
         ),
       ],
     );

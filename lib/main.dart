@@ -12,6 +12,7 @@ import 'kid/hud/kid_summary.dart';
 import 'kid/hud/register_kid_page.dart';
 import 'kid/kid.dart';
 import 'kid/reward/rewards_page.dart';
+import 'notification.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -35,6 +36,9 @@ final boxProvider = Provider<Box<dynamic>>((ref) {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //debugPrint('attempting read of noitifications');
+    //context.read(notificationProvider(context).future);
+
     return MaterialApp(
       title: 'Kid Good Good',
       debugShowCheckedModeBanner: false,
@@ -98,7 +102,7 @@ class _SummaryPageState extends State<SummaryPage> {
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.all(24.0),
-              child: KidsPointerList(),
+              child: KidsList(),
             )),
             ButtonBar(
               alignment: MainAxisAlignment.spaceBetween,
@@ -129,8 +133,8 @@ class _SummaryPageState extends State<SummaryPage> {
   }
 }
 
-class KidsPointerList extends ConsumerWidget {
-  const KidsPointerList({Key? key}) : super(key: key);
+class KidsList extends ConsumerWidget {
+  const KidsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {

@@ -1,4 +1,4 @@
-# kid_good_good
+# Kid Good Good
 
 Flutter project that is a simple kid point tracker for chores and behavior
 

@@ -48,7 +48,7 @@ class PointHistoryList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final history = kid.pointHistory;
-    final missingDaysList = missingDays();
+    final missingDaysList = findMissingDays();
 
     List<PointHistory> historyAndMissingDays = List.from(history)
       ..addAll(missingDaysList)
@@ -104,8 +104,12 @@ class PointHistoryList extends ConsumerWidget {
     );
   }
 
-  List<PointHistory> missingDays() {
-    final now = DateTime.now();
+  List<PointHistory> findMissingDays([DateTime? latestDateTime]) {
+    var now = latestDateTime;
+    if (now == null) {
+      now = DateTime.now();
+    }
+
     final history = kid.pointHistory;
     final firstDay = history.first.dateTime;
     final deltaInDays = now.difference(firstDay).inDays;

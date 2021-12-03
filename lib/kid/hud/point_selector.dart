@@ -71,7 +71,9 @@ class _PointSelectorState extends State<PointSelector> {
             final dateTime = widget.dateTime;
             if (dateTime != null) {
               widget.kid.addPointsAtTime(_currentValue, dateTime);
-            } else {
+            }
+            // Silly side affect for now, assuming if you are doing history, don't assume to give current day as well
+            else if (widget.historyUpdates.isEmpty) {
               widget.kid.points += _currentValue;
             }
 

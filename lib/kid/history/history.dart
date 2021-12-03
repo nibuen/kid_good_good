@@ -112,7 +112,7 @@ class HistoryList extends StatefulWidget {
 }
 
 class _HistoryListState extends State<HistoryList> {
-  late List<bool> itemsSelected;
+  List<bool> itemsSelected = const [];
   int selectedCount = 0;
 
   @override
@@ -127,17 +127,13 @@ class _HistoryListState extends State<HistoryList> {
   void didUpdateWidget(HistoryList oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.historyAndMissingDays.length >
-        widget.historyAndMissingDays.length) {
+    if (itemsSelected.length > widget.historyAndMissingDays.length) {
       itemsSelected =
           itemsSelected.sublist(0, widget.historyAndMissingDays.length);
-    } else if (oldWidget.historyAndMissingDays.length <
-        widget.historyAndMissingDays.length) {
+    } else if (itemsSelected.length < widget.historyAndMissingDays.length) {
       itemsSelected.addAll(
         List.filled(
-            widget.historyAndMissingDays.length -
-                oldWidget.historyAndMissingDays.length,
-            false),
+            widget.historyAndMissingDays.length - itemsSelected.length, false),
       );
     }
     assert(itemsSelected.length == widget.historyAndMissingDays.length);
@@ -172,11 +168,6 @@ class _HistoryListState extends State<HistoryList> {
                 .where((element) => element.value)
                 .map((e) => widget.historyAndMissingDays[e.key]);
 
-            // final mappedItems = itemsSelected.asMap()
-            //   ..removeWhere((key, value) => !value);
-            // final otherItems = mappedItems.map((key, value) =>
-            //     MapEntry(key, widget.historyAndMissingDays[key].dateTime));
-
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -204,7 +195,7 @@ class _HistoryListState extends State<HistoryList> {
           onSelectAllMissing: () {
             setState(() {
               for (int i = 0; i < widget.historyAndMissingDays.length; i++) {
-                if(widget.historyAndMissingDays[i] is MissingPointHistory) {
+                if (widget.historyAndMissingDays[i] is MissingPointHistory) {
                   itemsSelected[i] = true;
                 }
               }

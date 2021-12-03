@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'app_bar.dart';
 import 'constants.dart';
@@ -12,7 +13,6 @@ import 'kid/hud/kid_summary.dart';
 import 'kid/hud/register_kid_page.dart';
 import 'kid/kid.dart';
 import 'kid/reward/rewards_page.dart';
-import 'notification.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -22,7 +22,16 @@ void main() async {
     ..registerAdapter(PointHistoryAdapter());
   await Hive.openBox(hiveBoxName);
 
-  runApp(ProviderScope(child: App()));
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://956a05a25ccb4b36a2248624aa283ced@o1082895.ingest.sentry.io/6091897';
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(ProviderScope(child: App())),
+  );
 }
 
 class Adult {}

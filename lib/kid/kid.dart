@@ -112,6 +112,15 @@ class Kid extends StateNotifier<KidHive> {
     _read(kidsProvider).save();
   }
 
+  /// Returns false if [pointHistory] is not found.
+  bool updatePoints(PointHistory pointHistory, int value) {
+    final index = state.pointHistory.indexOf(pointHistory);
+    if (index == -1) return false;
+    state.pointHistory[index] =
+        PointHistory(dateTime: pointHistory.dateTime, points: value);
+    return true;
+  }
+
   String get firstName => state.firstName;
 
   String? get lastName => state.lastName;

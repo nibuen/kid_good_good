@@ -18,8 +18,22 @@ class KidAppBar extends ConsumerWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     return AppBar(
-      title: Text(
-          "$title ${showPoints ? " - Points: ${watch(selectedKidsProvider).points}" : ''}"),
+      centerTitle: true,
+      title: Text.rich(
+        TextSpan(
+          text: "${watch(selectedKidsProvider).firstName}'s $title",
+          children: <TextSpan>[
+            if (showPoints)
+              TextSpan(
+                text: "   ${watch(selectedKidsProvider).points}",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+          ],
+        ),
+      ),
       actions: [
         Padding(
           padding: const EdgeInsets.all(10.0),

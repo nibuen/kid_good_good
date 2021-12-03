@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kid_good_good/kid/history/history.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 import '../kid.dart';
@@ -9,12 +10,16 @@ class PointSelector extends StatefulWidget {
     required this.initialValue,
     required this.kid,
     this.dateTime,
+    this.historyUpdates = const [],
   }) : super(key: key);
 
   final int initialValue;
   final Kid kid;
 
   final DateTime? dateTime;
+
+  /// Can also update historical values as well, but won't change their [DateTime]
+  final List<PointHistory> historyUpdates;
 
   @override
   _PointSelectorState createState() => _PointSelectorState();
@@ -63,11 +68,22 @@ class _PointSelectorState extends State<PointSelector> {
         SizedBox(height: 12),
         FloatingActionButton.small(
           onPressed: () {
-            if(widget.dateTime == null) {
-              widget.kid.points += _currentValue;
+            final dateTime = widget.dateTime;
+            if (dateTime != null) {
+              widget.kid.addPointsAtTime(_currentValue, dateTime);
             } else {
-              widget.kid.addPointsAtTime(_currentValue, widget.dateTime!);
+              widget.kid.points += _currentValue;
             }
+
+            widget.historyUpdates.forEach((pointHistory) {
+              if (pointHistory is MissingPointHistory) {
+                // MissingPointHistory is just a Visual queue, doesn't exist in history so just add it
+                widget.kid
+                    .addPointsAtTime(_currentValue, pointHistory.dateTime);
+              } else {
+                widget.kid.updatePoints(pointHistory, _currentValue);
+              }
+            });
           },
           tooltip: 'Add Points',
           child: Icon(Icons.check),

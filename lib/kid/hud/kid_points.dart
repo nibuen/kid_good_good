@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_good_good/kid/history/history.dart';
 
 import '../kid.dart';
 import 'kid_signup.dart';
@@ -35,12 +36,14 @@ class KidPointer extends ConsumerWidget {
     required this.kid,
     this.initialValue = 20,
     this.dateTime,
+    this.historyUpdates = const[],
   }) : super(key: key);
 
   final Kid kid;
   final int initialValue;
 
   final DateTime? dateTime;
+  final List<PointHistory> historyUpdates;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -58,6 +61,7 @@ class KidPointer extends ConsumerWidget {
                     initialValue: initialValue,
                     kid: kid,
                     dateTime: dateTime,
+                    historyUpdates: historyUpdates,
                   ),
                 ],
               ),

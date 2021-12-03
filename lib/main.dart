@@ -50,7 +50,7 @@ class App extends StatelessWidget {
       routes: {
         '/rewards': (c) {
           return RewardsPage(
-            title: 'Buy Rewards',
+            title: 'Rewards',
             kid: c.read(selectedKidsProvider.notifier),
           );
         },
@@ -59,7 +59,7 @@ class App extends StatelessWidget {
             builder: (_, watch, __) {
               watch(selectedKidsProvider);
               return HistoryPage(
-                title: 'Kid History',
+                title: 'History',
                 kid: c.read(selectedKidsProvider.notifier),
               );
             },

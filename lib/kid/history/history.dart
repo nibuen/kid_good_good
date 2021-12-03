@@ -133,10 +133,12 @@ class _HistoryListState extends State<HistoryList> {
           itemsSelected.sublist(0, widget.historyAndMissingDays.length);
     } else if (oldWidget.historyAndMissingDays.length <
         widget.historyAndMissingDays.length) {
-      itemsSelected.addAll(List.filled(
-          widget.historyAndMissingDays.length -
-              oldWidget.historyAndMissingDays.length,
-          false));
+      itemsSelected.addAll(
+        List.filled(
+            widget.historyAndMissingDays.length -
+                oldWidget.historyAndMissingDays.length,
+            false),
+      );
     }
     assert(itemsSelected.length == widget.historyAndMissingDays.length);
   }
@@ -197,6 +199,16 @@ class _HistoryListState extends State<HistoryList> {
                 itemsSelected[i] = true;
               }
               selectedCount = itemsSelected.length;
+            });
+          },
+          onSelectAllMissing: () {
+            setState(() {
+              for (int i = 0; i < widget.historyAndMissingDays.length; i++) {
+                if(widget.historyAndMissingDays[i] is MissingPointHistory) {
+                  itemsSelected[i] = true;
+                }
+              }
+              selectedCount = 0;
             });
           },
           onDeselectAll: () {
@@ -271,19 +283,21 @@ class SelectedCounter extends StatefulWidget {
   const SelectedCounter({
     required this.selectedCount,
     required this.onSelectAll,
+    required this.onSelectAllMissing,
     required this.onDeselectAll,
     Key? key,
   }) : super(key: key);
 
   final int selectedCount;
   final VoidCallback onSelectAll;
+  final VoidCallback onSelectAllMissing;
   final VoidCallback onDeselectAll;
 
   @override
   State<SelectedCounter> createState() => _SelectedCounterState();
 }
 
-enum Selections { select_all, deselect_all }
+enum Selections { select_all, select_all_missing, deselect_all }
 
 class _SelectedCounterState extends State<SelectedCounter> {
   Selections _selection = Selections.select_all;
@@ -319,6 +333,9 @@ class _SelectedCounterState extends State<SelectedCounter> {
             case Selections.select_all:
               widget.onSelectAll();
               break;
+            case Selections.select_all_missing:
+              widget.onSelectAllMissing();
+              break;
             case Selections.deselect_all:
               widget.onDeselectAll();
               break;
@@ -329,6 +346,10 @@ class _SelectedCounterState extends State<SelectedCounter> {
         const PopupMenuItem<Selections>(
           value: Selections.select_all,
           child: Text('Select All'),
+        ),
+        const PopupMenuItem<Selections>(
+          value: Selections.select_all_missing,
+          child: Text('Select All Missing'),
         ),
         const PopupMenuItem<Selections>(
           value: Selections.deselect_all,

@@ -12,8 +12,8 @@ class SelectedKidPointer extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final kid = watch(selectedKidsProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final kid = ref.watch(selectedKidsProvider.notifier);
     return AnimatedSize(
       duration: const Duration(milliseconds: 500),
       child: kid.registered
@@ -46,7 +46,7 @@ class KidPointer extends ConsumerWidget {
   final List<PointHistory> historyUpdates;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return kid.registered
         ? Card(
             child: Container(

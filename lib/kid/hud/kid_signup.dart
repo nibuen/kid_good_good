@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_good_good/kid/kid.dart';
 
-class KidSignupForm extends StatefulWidget {
+class KidSignupForm extends ConsumerStatefulWidget {
   const KidSignupForm({
     Key? key,
     this.onSubmitted,
@@ -16,7 +16,7 @@ class KidSignupForm extends StatefulWidget {
   }
 }
 
-class KidSignupFormState extends State<KidSignupForm> {
+class KidSignupFormState extends ConsumerState<KidSignupForm> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
@@ -67,7 +67,7 @@ class KidSignupFormState extends State<KidSignupForm> {
                   final kid = KidHive(firstName: firstNameController.text)
                     ..lastName = lastNameController.text
                     ..registered = true;
-                  context.read(repositoryProvider).add(kid);
+                  ref.read(repositoryProvider).add(kid);
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Saved Child Information')),

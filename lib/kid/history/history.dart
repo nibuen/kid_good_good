@@ -46,7 +46,7 @@ class PointHistoryList extends ConsumerWidget {
   final Kid kid;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final history = kid.pointHistory;
     final missingDaysList = findMissingDays();
 

@@ -8,7 +8,7 @@ import 'history/history.dart';
 
 part 'kid.g.dart';
 
-final repositoryProvider = Provider((ref) => KidRepository(ref.read));
+final repositoryProvider = Provider<KidRepository>((ref) => KidRepository(ref.read));
 
 final boxKidsProvider = Provider<Kids>((ref) {
   final box = ref.read(boxProvider);

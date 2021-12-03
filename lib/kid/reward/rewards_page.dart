@@ -127,7 +127,7 @@ class _RewardCard extends ConsumerWidget {
   final Reward reward;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () => showDialog(
         context: context,

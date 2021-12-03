@@ -58,7 +58,7 @@ final notificationProvider =
 
 class NotificationBuilder extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //final FlutterLocalNotificationsPlugin item = watch(notificationProvider(context));
     // TODO: implement build
     throw UnimplementedError();

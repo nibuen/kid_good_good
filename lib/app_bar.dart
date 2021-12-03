@@ -16,16 +16,16 @@ class KidAppBar extends ConsumerWidget with PreferredSizeWidget {
   final bool showPoints;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
       centerTitle: true,
       title: Text.rich(
         TextSpan(
-          text: "${watch(selectedKidsProvider).firstName}'s $title",
+          text: "${ref.watch(selectedKidsProvider).firstName}'s $title",
           children: <TextSpan>[
             if (showPoints)
               TextSpan(
-                text: "   ${watch(selectedKidsProvider).points}",
+                text: "   ${ref.watch(selectedKidsProvider).points}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -51,12 +51,12 @@ class _KidAvatar extends ConsumerWidget {
   const _KidAvatar({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, "user_select"),
       child: CircleAvatar(
         foregroundColor: Colors.deepOrange,
-        child: Text("${watch(selectedKidsProvider).firstName}"),
+        child: Text("${ref.watch(selectedKidsProvider).firstName}"),
       ),
     );
   }

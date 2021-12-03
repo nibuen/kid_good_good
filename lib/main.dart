@@ -33,9 +33,9 @@ final boxProvider = Provider<Box<dynamic>>((ref) {
   return box;
 });
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //debugPrint('attempting read of noitifications');
     //context.read(notificationProvider(context).future);
 
@@ -51,16 +51,16 @@ class App extends StatelessWidget {
         '/rewards': (c) {
           return RewardsPage(
             title: 'Rewards',
-            kid: c.read(selectedKidsProvider.notifier),
+            kid: ref.read(selectedKidsProvider.notifier),
           );
         },
         '/history': (c) {
           return Consumer(
-            builder: (_, watch, __) {
-              watch(selectedKidsProvider);
+            builder: (_, ref, __) {
+              ref.watch(selectedKidsProvider);
               return HistoryPage(
                 title: 'History',
-                kid: c.read(selectedKidsProvider.notifier),
+                kid: ref.read(selectedKidsProvider.notifier),
               );
             },
           );
@@ -68,7 +68,7 @@ class App extends StatelessWidget {
         '/register_kid': (c) {
           return RegisterKidPage(
             title: 'Register New Child',
-            kid: c.read(selectedKidsProvider.notifier),
+            kid: ref.read(selectedKidsProvider.notifier),
           );
         },
       },
@@ -137,17 +137,17 @@ class KidsList extends ConsumerWidget {
   const KidsList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // TODO This helps selected kid update correctly, should narrow rebuild
-    watch(selectedKidsProvider);
-    final kidsHive = watch(kidsProvider);
+    ref.watch(selectedKidsProvider);
+    final kidsHive = ref.watch(kidsProvider);
     final kids = kidsHive.kids;
     final selectedIndex = kidsHive.selectedKidIndex;
     //debugPrint("$kids with $selectedIndex");
 
     return ListView.builder(
       itemBuilder: (context, index) => GestureDetector(
-        onTap: () => context.read(kidsProvider.notifier).select(index),
+        onTap: () => ref.read(kidsProvider.notifier).select(index),
         onLongPress: () {
           showDialog(
             context: context,
@@ -157,7 +157,7 @@ class KidsList extends ConsumerWidget {
                 IconButton(
                   icon: Icon(Icons.delete, color: Colors.redAccent),
                   onPressed: () {
-                    context.read(repositoryProvider).removeSelectedKid();
+                    ref.read(repositoryProvider).removeSelectedKid();
                   },
                 ),
                 IconButton(
@@ -172,7 +172,7 @@ class KidsList extends ConsumerWidget {
           );
         },
         child: KidSummary(
-          kid: Kid(kids[index], context.read),
+          kid: Kid(kids[index], ref.read),
           icon: selectedIndex == index ? Icons.check : Icons.person,
         ),
       ),

@@ -8,7 +8,8 @@ import 'history/history.dart';
 
 part 'kid.g.dart';
 
-final repositoryProvider = Provider<KidRepository>((ref) => KidRepository(ref.read));
+final repositoryProvider =
+    Provider<KidRepository>((ref) => KidRepository(ref.read));
 
 final boxKidsProvider = Provider<Kids>((ref) {
   final box = ref.read(boxProvider);
@@ -19,7 +20,7 @@ final kidsProvider = StateNotifierProvider<KidsState, Kids>(
   (ref) => KidsState(ref.watch(boxKidsProvider)),
 );
 
-final selectedKidsProvider = StateNotifierProvider<Kid, KidHive>(
+final selectedKidProvider = StateNotifierProvider<Kid, KidHive>(
   (ref) {
     final provider = ref.watch(kidsProvider);
     final selectedIndex = provider.selectedKidIndex;
@@ -53,7 +54,7 @@ class KidRepository {
 
   bool removeSelectedKid() {
     final kids = _read(kidsProvider.notifier);
-    final changed = kids.remove(_read(selectedKidsProvider));
+    final changed = kids.remove(_read(selectedKidProvider));
     if (changed) kids.save();
     return changed;
   }
@@ -116,8 +117,11 @@ class Kid extends StateNotifier<KidHive> {
   bool updatePoints(PointHistory pointHistory, int value) {
     final index = state.pointHistory.indexOf(pointHistory);
     if (index == -1) return false;
-    state.pointHistory[index] =
+
+    state = state..pointHistory[index] =
         PointHistory(dateTime: pointHistory.dateTime, points: value);
+    _read(kidsProvider).save();
+
     return true;
   }
 

@@ -60,16 +60,16 @@ class App extends ConsumerWidget {
         '/rewards': (c) {
           return RewardsPage(
             title: 'Rewards',
-            kid: ref.read(selectedKidsProvider.notifier),
+            kid: ref.read(selectedKidProvider.notifier),
           );
         },
         '/history': (c) {
           return Consumer(
             builder: (_, ref, __) {
-              ref.watch(selectedKidsProvider);
+              ref.watch(selectedKidProvider);
               return HistoryPage(
                 title: 'History',
-                kid: ref.read(selectedKidsProvider.notifier),
+                kid: ref.read(selectedKidProvider.notifier),
               );
             },
           );
@@ -77,7 +77,7 @@ class App extends ConsumerWidget {
         '/register_kid': (c) {
           return RegisterKidPage(
             title: 'Register New Child',
-            kid: ref.read(selectedKidsProvider.notifier),
+            kid: ref.read(selectedKidProvider.notifier),
           );
         },
       },
@@ -148,7 +148,7 @@ class KidsList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO This helps selected kid update correctly, should narrow rebuild
-    ref.watch(selectedKidsProvider);
+    ref.watch(selectedKidProvider);
     final kidsHive = ref.watch(kidsProvider);
     final kids = kidsHive.kids;
     final selectedIndex = kidsHive.selectedKidIndex;

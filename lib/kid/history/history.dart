@@ -8,6 +8,7 @@ import 'package:kid_good_good/kid/reward/reward.dart';
 
 import '../../app_bar.dart';
 import '../kid.dart';
+import 'monthly_history_line_chart.dart';
 
 part 'history.g.dart';
 
@@ -32,7 +33,25 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: KidAppBar(
         title: widget.title,
       ),
-      body: PointHistoryList(kid: widget.kid),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 16,
+            child: PointHistoryList(kid: widget.kid),
+          ),
+          Flexible(
+            flex: 5,
+            child: FractionallySizedBox(
+              heightFactor: 1.0,
+              widthFactor: .9,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: MonthlyHistoryLineChart(kid: widget.kid),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -47,6 +66,7 @@ class PointHistoryList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(selectedKidProvider);
     final history = kid.pointHistory;
     final missingDaysList = findMissingDays();
 
@@ -174,11 +194,12 @@ class _HistoryListState extends State<HistoryList> {
                 title: const Text('Update Points'),
                 content: KidPointer(
                   kid: widget.kid,
-                  initialValue: 20,
+                  initialValue:
+                      mappedItems.isNotEmpty ? mappedItems.first.points : 20,
                   historyUpdates: mappedItems.toList(),
                 ),
               ),
-            );
+            ).whenComplete(() => setState(() { debugPrint("got alert complete!");}));
           },
         ),
         VerticalDivider(thickness: 2),
@@ -352,7 +373,7 @@ class _SelectedCounterState extends State<SelectedCounter> {
 }
 
 @HiveType(typeId: HistoryTypeId)
-class PointHistory extends Comparable<PointHistory> {
+class PointHistory with Comparable<PointHistory> {
   PointHistory({
     required this.points,
     required this.dateTime,

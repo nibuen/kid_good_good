@@ -21,11 +21,11 @@ class KidAppBar extends ConsumerWidget with PreferredSizeWidget {
       centerTitle: true,
       title: Text.rich(
         TextSpan(
-          text: "${ref.watch(selectedKidsProvider).firstName}'s $title",
+          text: "${ref.watch(selectedKidProvider).firstName}'s $title",
           children: <TextSpan>[
             if (showPoints)
               TextSpan(
-                text: "   ${ref.watch(selectedKidsProvider).points}",
+                text: "   ${ref.watch(selectedKidProvider).points}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -56,7 +56,7 @@ class _KidAvatar extends ConsumerWidget {
       onTap: () => Navigator.pushNamed(context, "user_select"),
       child: CircleAvatar(
         foregroundColor: Colors.deepOrange,
-        child: Text("${ref.watch(selectedKidsProvider).firstName}"),
+        child: Text("${ref.watch(selectedKidProvider).firstName}"),
       ),
     );
   }

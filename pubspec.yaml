@@ -41,6 +41,8 @@ dependencies:
 
   flutter_local_notifications: 9.0.0
 
+  fl_chart: ^0.40.2
+
 dev_dependencies:
   hive_generator: ^1.1.1
   build_runner: ^2.1.2

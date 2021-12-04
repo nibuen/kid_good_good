@@ -13,7 +13,7 @@ class SelectedKidPointer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kid = ref.watch(selectedKidsProvider.notifier);
+    final kid = ref.watch(selectedKidProvider.notifier);
     return AnimatedSize(
       duration: const Duration(milliseconds: 500),
       child: kid.registered

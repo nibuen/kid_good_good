@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kid_good_good/kid/history/history.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../kid.dart';
 
@@ -9,14 +10,14 @@ class PointSelector extends StatefulWidget {
     Key? key,
     required this.initialValue,
     required this.kid,
-    this.dateTime,
+    this.initialDateTime,
     this.historyUpdates = const [],
   }) : super(key: key);
 
   final int initialValue;
   final Kid kid;
 
-  final DateTime? dateTime;
+  final DateTime? initialDateTime;
 
   /// Can also update historical values as well, but won't change their [DateTime]
   final List<PointHistory> historyUpdates;
@@ -26,12 +27,14 @@ class PointSelector extends StatefulWidget {
 }
 
 class _PointSelectorState extends State<PointSelector> {
-  int _currentValue = 0;
+  late int _currentValue;
+  late DateTime? _selectedDate;
 
   @override
   void initState() {
     super.initState();
     _currentValue = widget.initialValue;
+    _selectedDate = widget.initialDateTime;
   }
 
   @override
@@ -65,10 +68,26 @@ class _PointSelectorState extends State<PointSelector> {
             ],
           ),
         ),
+        SizedBox(
+          width: 300,
+          height: 300,
+          child: SfDateRangePicker(
+            initialSelectedDate: _selectedDate,
+            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+              _selectedDate = args.value as DateTime;
+              debugPrint("new selectedDate: $_selectedDate");
+            },
+            selectionMode: DateRangePickerSelectionMode.single,
+            showTodayButton: true,
+            initialSelectedRange: PickerDateRange(
+                DateTime.now().subtract(const Duration(days: 4)),
+                DateTime.now().add(const Duration(days: 3))),
+          ),
+        ),
         SizedBox(height: 12),
         FloatingActionButton.small(
           onPressed: () {
-            final dateTime = widget.dateTime;
+            final dateTime = _selectedDate;
             if (dateTime != null) {
               widget.kid.addPointsAtTime(_currentValue, dateTime);
             }

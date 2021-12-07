@@ -102,7 +102,6 @@ class _SummaryPageState extends State<SummaryPage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16.0),

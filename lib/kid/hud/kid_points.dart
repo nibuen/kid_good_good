@@ -7,7 +7,7 @@ import 'kid_signup.dart';
 import 'point_selector.dart';
 
 class SelectedKidPointer extends ConsumerWidget {
-  SelectedKidPointer({
+  const SelectedKidPointer({
     Key? key,
   }) : super(key: key);
 
@@ -19,31 +19,32 @@ class SelectedKidPointer extends ConsumerWidget {
       child: kid.registered
           ? KidPointer(kid: kid)
           : Container(
-            child: Text(
+              child: Text(
                 "Select or Add a Child Below",
                 style: Theme.of(context).textTheme.headline4,
                 textAlign: TextAlign.center,
               ),
-          ),
+            ),
     );
   }
 }
-
 
 class KidPointer extends ConsumerWidget {
   KidPointer({
     Key? key,
     required this.kid,
     this.initialValue = 20,
-    this.dateTime,
-    this.historyUpdates = const[],
+    this.initialDateTime,
+    this.historyUpdates = const [],
   }) : super(key: key);
 
   final Kid kid;
   final int initialValue;
 
-  final DateTime? dateTime;
+  final DateTime? initialDateTime;
   final List<PointHistory> historyUpdates;
+
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,7 +61,7 @@ class KidPointer extends ConsumerWidget {
                   PointSelector(
                     initialValue: initialValue,
                     kid: kid,
-                    dateTime: dateTime,
+                    initialDateTime: initialDateTime,
                     historyUpdates: historyUpdates,
                   ),
                 ],

@@ -5,10 +5,13 @@ import 'package:kid_good_good/kid/kid.dart';
 class MonthlyHistoryLineChart extends StatelessWidget {
   MonthlyHistoryLineChart({
     required this.kid,
+    int? year,
     Key? key,
-  }) : super(key: key);
+  })  : this.year = year ?? DateTime.now().year,
+        super(key: key);
 
   final Kid kid;
+  final int year;
 
   final List<Color> gradientColors = [
     const Color(0xff23b6e6),
@@ -19,6 +22,8 @@ class MonthlyHistoryLineChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<int, int> values = {};
     final history = kid.pointHistory;
+
+    history.removeWhere((element) => element.dateTime.year != year);
     history.forEach((element) {
       values.putIfAbsent(element.dateTime.month, () => 0);
       values[element.dateTime.month] =
@@ -82,7 +87,7 @@ class MonthlyHistoryLineChart extends StatelessWidget {
           ),
           leftTitles: SideTitles(
             showTitles: true,
-            interval: 50,
+            interval: 100,
             getTextStyles: (context, value) => textStyle,
             reservedSize: 22,
             margin: 20,
@@ -138,7 +143,8 @@ class MonthlyHistoryLineChart extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child: Text("Monthly Points", style: textStyle.copyWith(fontSize: 22)),
+              child: Text("$year Monthly Points",
+                  style: textStyle.copyWith(fontSize: 22)),
             ),
             Expanded(
               child: Padding(

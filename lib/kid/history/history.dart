@@ -12,6 +12,38 @@ import 'monthly_history_line_chart.dart';
 
 part 'history.g.dart';
 
+final historyProvider = Provider((ref) => History());
+
+class History {
+  /// Finds missing days between the first historical item in time order and missing days up till now.
+  List<PointHistory> findMissingDays(List<PointHistory> pointHistory,
+      [DateTime? latestDateTime]) {
+    var now = latestDateTime;
+    if (now == null) {
+      now = DateTime.now();
+    }
+
+    final List<PointHistory> missingDays = [];
+
+    if (pointHistory.isNotEmpty) {
+      final firstDay = pointHistory.first.dateTime;
+      final deltaInDays = now.difference(firstDay).inDays;
+
+      for (int i = 1; i < deltaInDays + 1; i++) {
+        final checkDate = firstDay.add(Duration(days: i));
+        final PointHistory check = pointHistory.firstWhere(
+            (element) => element.dateTime.day == checkDate.day,
+            orElse: () => MissingPointHistory(checkDate));
+        if (check is MissingPointHistory) {
+          missingDays.add(check);
+        }
+      }
+    }
+
+    return missingDays;
+  }
+}
+
 class HistoryPage extends StatefulWidget {
   const HistoryPage({
     Key? key,
@@ -67,10 +99,11 @@ class PointHistoryList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(selectedKidProvider);
-    final history = kid.pointHistory;
-    final missingDaysList = findMissingDays();
+    final History history = ref.watch(historyProvider);
+    final pointHistory = kid.pointHistory;
+    final missingDaysList = history.findMissingDays(pointHistory);
 
-    List<PointHistory> historyAndMissingDays = List.from(history)
+    List<PointHistory> historyAndMissingDays = List.from(pointHistory)
       ..addAll(missingDaysList)
       ..sort();
     historyAndMissingDays = historyAndMissingDays.reversed.toList();
@@ -199,7 +232,7 @@ class _HistoryListState extends State<HistoryList> {
                   historyUpdates: mappedItems.toList(),
                 ),
               ),
-            ).whenComplete(() => setState(() { debugPrint("got alert complete!");}));
+            );
           },
         ),
         VerticalDivider(thickness: 2),
@@ -220,7 +253,7 @@ class _HistoryListState extends State<HistoryList> {
                   itemsSelected[i] = true;
                 }
               }
-              selectedCount = 0;
+              updateSelectedCount();
             });
           },
           onDeselectAll: () {
@@ -395,4 +428,9 @@ class PointHistory with Comparable<PointHistory> {
 
 class MissingPointHistory extends PointHistory {
   MissingPointHistory(DateTime dateTime) : super(points: 0, dateTime: dateTime);
+
+  @override
+  String toString() {
+    return "MissingPointHistory(dateTime = $dateTime , points = $points)";
+  }
 }

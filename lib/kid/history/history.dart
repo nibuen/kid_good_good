@@ -16,24 +16,28 @@ final historyProvider = Provider((ref) => History());
 
 class History {
   /// Finds missing days between the first historical item in time order and missing days up till now.
+  /// This is limited to only checking within one year.
   List<PointHistory> findMissingDays(List<PointHistory> pointHistory,
       [DateTime? latestDateTime]) {
     var now = latestDateTime;
+    final List<PointHistory> missingDays = [];
+
     if (now == null) {
       now = DateTime.now();
     }
 
-    final List<PointHistory> missingDays = [];
-
     if (pointHistory.isNotEmpty) {
+      pointHistory.sort();
+      final daysWithPoints = Set.of(pointHistory.map((e) => e.dateTime.day));
       final firstDay = pointHistory.first.dateTime;
       final deltaInDays = now.difference(firstDay).inDays;
 
       for (int i = 1; i < deltaInDays + 1; i++) {
         final checkDate = firstDay.add(Duration(days: i));
-        final PointHistory check = pointHistory.firstWhere(
-            (element) => element.dateTime.day == checkDate.day,
-            orElse: () => MissingPointHistory(checkDate));
+        final PointHistory? check = daysWithPoints.contains(checkDate.day)
+            ? null
+            : MissingPointHistory(checkDate);
+
         if (check is MissingPointHistory) {
           missingDays.add(check);
         }

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -9,7 +8,7 @@ import 'app_bar.dart';
 import 'constants.dart';
 import 'kid/history/history.dart';
 import 'kid/hud/kid_points.dart';
-import 'kid/hud/kid_summary.dart';
+import 'kid/hud/kid_summary_tile.dart';
 import 'kid/hud/register_kid_page.dart';
 import 'kid/kid.dart';
 import 'kid/reward/rewards_page.dart';
@@ -26,9 +25,7 @@ void main() async {
     (options) {
       options.dsn =
           'https://956a05a25ccb4b36a2248624aa283ced@o1082895.ingest.sentry.io/6091897';
-      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-      // We recommend adjusting this value in production.
-      options.tracesSampleRate = 1.0;
+      options.tracesSampleRate = .1;
     },
     appRunner: () => runApp(ProviderScope(child: App())),
   );
@@ -80,6 +77,12 @@ class App extends ConsumerWidget {
             kid: ref.read(selectedKidProvider.notifier),
           );
         },
+        '/kid_details': (c) {
+          return KidDetailsPage(
+            title: 'Details',
+            kid: ref.read(selectedKidProvider.notifier),
+          );
+        },
       },
     );
   }
@@ -104,8 +107,11 @@ class _SummaryPageState extends State<SummaryPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SelectedKidPointer(),
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                "Children",
+                style: Theme.of(context).textTheme.headline4,
+              ),
             ),
             Expanded(
                 child: Padding(
@@ -120,6 +126,46 @@ class _SummaryPageState extends State<SummaryPage> {
                       Navigator.pushNamed(context, "/register_kid"),
                   child: Text("New Child"),
                 ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class KidDetailsPage extends StatefulWidget {
+  const KidDetailsPage({
+    Key? key,
+    required this.title,
+    required this.kid,
+  }) : super(key: key);
+
+  final String title;
+  final Kid kid;
+  @override
+  _KidDetailsPageState createState() => _KidDetailsPageState();
+}
+
+class _KidDetailsPageState extends State<KidDetailsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: KidAppBar(
+        title: widget.title,
+      ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SelectedKidPointer(),
+            ),
+            Spacer(),
+            ButtonBar(
+              alignment: MainAxisAlignment.spaceBetween,
+              children: [
                 ButtonBar(
                   children: [
                     ElevatedButton(
@@ -141,6 +187,7 @@ class _SummaryPageState extends State<SummaryPage> {
   }
 }
 
+
 class KidsList extends ConsumerWidget {
   const KidsList({Key? key}) : super(key: key);
 
@@ -155,7 +202,10 @@ class KidsList extends ConsumerWidget {
 
     return ListView.builder(
       itemBuilder: (context, index) => GestureDetector(
-        onTap: () => ref.read(kidsProvider.notifier).select(index),
+        onTap: () {
+          ref.read(kidsProvider.notifier).select(index);
+          Navigator.pushNamed(context, "/kid_details");
+        },
         onLongPress: () {
           showDialog(
             context: context,
@@ -179,7 +229,7 @@ class KidsList extends ConsumerWidget {
             ),
           );
         },
-        child: KidSummary(
+        child: KidSummaryTile(
           kid: Kid(kids[index], ref.read),
           icon: selectedIndex == index ? Icons.check : Icons.person,
         ),

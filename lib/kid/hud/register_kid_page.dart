@@ -17,7 +17,7 @@ class RegisterKidPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KidAppBar(title: title, showPoints: false),
+      appBar: KidAppBar(title: title, showPoints: false, showChildName: false),
       body: KidSignupForm(onSubmitted: () => Navigator.pop(context)),
     );
   }

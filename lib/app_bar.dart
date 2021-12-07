@@ -10,10 +10,13 @@ class KidAppBar extends ConsumerWidget with PreferredSizeWidget {
     Key? key,
     required this.title,
     this.showPoints = true,
+    this.showChildName = true,
   }) : super(key: key);
 
   final String title;
+
   final bool showPoints;
+  final bool showChildName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +24,8 @@ class KidAppBar extends ConsumerWidget with PreferredSizeWidget {
       centerTitle: true,
       title: Text.rich(
         TextSpan(
-          text: "${ref.watch(selectedKidProvider).firstName}'s $title",
+          text:
+              "${showChildName ? ref.watch(selectedKidProvider).firstName + "'s " : ''}$title",
           children: <TextSpan>[
             if (showPoints)
               TextSpan(

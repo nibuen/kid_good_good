@@ -17,7 +17,7 @@ class SelectedKidPointer extends ConsumerWidget {
     return AnimatedSize(
       duration: const Duration(milliseconds: 500),
       child: kid.registered
-          ? KidPointer(kid: kid)
+          ? KidPointsOrRegister(kid: kid)
           : Container(
               child: Text(
                 "Select or Add a Child Below",
@@ -29,8 +29,8 @@ class SelectedKidPointer extends ConsumerWidget {
   }
 }
 
-class KidPointer extends ConsumerWidget {
-  KidPointer({
+class KidPointsOrRegister extends ConsumerWidget {
+  KidPointsOrRegister({
     Key? key,
     required this.kid,
     this.initialValue = 20,
@@ -43,8 +43,6 @@ class KidPointer extends ConsumerWidget {
 
   final DateTime? initialDateTime;
   final List<PointHistory> historyUpdates;
-
-  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

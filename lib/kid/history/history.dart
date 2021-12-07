@@ -229,7 +229,7 @@ class _HistoryListState extends State<HistoryList> {
               context: context,
               builder: (context) => AlertDialog(
                 title: const Text('Update Points'),
-                content: KidPointer(
+                content: KidPointsOrRegister(
                   kid: widget.kid,
                   initialValue:
                       mappedItems.isNotEmpty ? mappedItems.first.points : 20,

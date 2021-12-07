@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../kid.dart';
 
-class KidSummary extends StatelessWidget {
-  KidSummary({
+class KidSummaryTile extends StatelessWidget {
+  KidSummaryTile({
     Key? key,
     required this.kid,
     this.icon = Icons.person,

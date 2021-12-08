@@ -52,7 +52,10 @@ class App extends ConsumerWidget {
         primarySwatch: Colors.green,
         secondaryHeaderColor: Colors.orangeAccent,
       ),
-      home: SummaryPage(title: 'Summary'),
+      home: SummaryPage(
+        title: 'Summary',
+        kid: ref.watch(selectedKidProvider.notifier),
+      ),
       routes: {
         '/rewards': (c) {
           return RewardsPage(
@@ -89,8 +92,14 @@ class App extends ConsumerWidget {
 }
 
 class SummaryPage extends StatefulWidget {
-  SummaryPage({Key? key, required this.title}) : super(key: key);
+  SummaryPage({
+    Key? key,
+    required this.title,
+    required this.kid,
+  }) : super(key: key);
+
   final String title;
+  final Kid kid;
 
   @override
   _SummaryPageState createState() => _SummaryPageState();
@@ -126,6 +135,27 @@ class _SummaryPageState extends State<SummaryPage> {
                       Navigator.pushNamed(context, "/register_kid"),
                   child: Text("New Child"),
                 ),
+                if (widget.kid.registered) ...[
+                  ButtonBar(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, "/kid_details"),
+                        child: Text("Add Points"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, "/rewards"),
+                        child: Text("Rewards"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, "/history"),
+                        child: Text("History"),
+                      ),
+                    ],
+                  ),
+                ]
               ],
             ),
           ],
@@ -144,6 +174,7 @@ class KidDetailsPage extends StatefulWidget {
 
   final String title;
   final Kid kid;
+
   @override
   _KidDetailsPageState createState() => _KidDetailsPageState();
 }
@@ -167,16 +198,7 @@ class _KidDetailsPageState extends State<KidDetailsPage> {
               alignment: MainAxisAlignment.spaceBetween,
               children: [
                 ButtonBar(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => Navigator.pushNamed(context, "/rewards"),
-                      child: Text("Rewards"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => Navigator.pushNamed(context, "/history"),
-                      child: Text("History"),
-                    ),
-                  ],
+                  children: [],
                 ),
               ],
             ),
@@ -186,7 +208,6 @@ class _KidDetailsPageState extends State<KidDetailsPage> {
     );
   }
 }
-
 
 class KidsList extends ConsumerWidget {
   const KidsList({Key? key}) : super(key: key);
@@ -204,7 +225,7 @@ class KidsList extends ConsumerWidget {
       itemBuilder: (context, index) => GestureDetector(
         onTap: () {
           ref.read(kidsProvider.notifier).select(index);
-          Navigator.pushNamed(context, "/kid_details");
+          //Navigator.pushNamed(context, "/kid_details");
         },
         onLongPress: () {
           showDialog(

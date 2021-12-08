@@ -213,11 +213,11 @@ class _HistoryListState extends State<HistoryList> {
                     itemsSelected.removeAt(i);
                   }
                 }
-                updateSelectedCount();
+                _updateSelectedCount();
               });
             }),
         IconButton(
-          icon: Icon(Icons.edit),
+          icon: _isItemSelected() ? Icon(Icons.add) : Icon(Icons.edit),
           onPressed: () {
             final mappedItems = itemsSelected
                 .asMap()
@@ -257,7 +257,7 @@ class _HistoryListState extends State<HistoryList> {
                   itemsSelected[i] = true;
                 }
               }
-              updateSelectedCount();
+              _updateSelectedCount();
             });
           },
           onDeselectAll: () {
@@ -301,7 +301,7 @@ class _HistoryListState extends State<HistoryList> {
                         onChanged: (bool? value) {
                           setState(() {
                             itemsSelected[index] = value!;
-                            updateSelectedCount();
+                            _updateSelectedCount();
                           });
                         },
                         value: itemsSelected[index],
@@ -318,7 +318,7 @@ class _HistoryListState extends State<HistoryList> {
     );
   }
 
-  void updateSelectedCount() {
+  void _updateSelectedCount() {
     setState(() {
       selectedCount = itemsSelected.fold(
           0,
@@ -326,6 +326,8 @@ class _HistoryListState extends State<HistoryList> {
               element ? previousValue + 1 : previousValue);
     });
   }
+
+  bool _isItemSelected() => selectedCount == 0;
 }
 
 class SelectedCounter extends StatefulWidget {

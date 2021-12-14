@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_good_good/user/user.dart';
 
 import 'kid/kid.dart';
 
 const double kToolbarHeight = 56.0;
 
-class KidAppBar extends ConsumerWidget with PreferredSizeWidget {
-  const KidAppBar({
+class UserAppBar extends ConsumerWidget with PreferredSizeWidget {
+  const UserAppBar({
     Key? key,
     required this.title,
     this.showPoints = true,
@@ -41,7 +42,7 @@ class KidAppBar extends ConsumerWidget with PreferredSizeWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.all(10.0),
-          child: _KidAvatar(),
+          child: _UserAvatar(),
         ),
       ],
     );
@@ -61,6 +62,21 @@ class _KidAvatar extends ConsumerWidget {
       child: CircleAvatar(
         foregroundColor: Colors.deepOrange,
         child: Text("${ref.watch(selectedKidProvider).firstName}"),
+      ),
+    );
+  }
+}
+
+class _UserAvatar extends ConsumerWidget {
+  const _UserAvatar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, "user_select"),
+      child: CircleAvatar(
+        foregroundColor: Colors.deepOrange,
+        child: Text("${ref.watch(selectedUserProvider).firstName}"),
       ),
     );
   }

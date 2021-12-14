@@ -10,11 +10,13 @@ class PointSelector extends StatefulWidget {
     Key? key,
     required this.initialValue,
     required this.kid,
+    required this.kidRepository,
     this.initialDateTime,
     this.historyUpdates = const [],
   }) : super(key: key);
 
   final int initialValue;
+  final KidRepository kidRepository;
   final Kid kid;
 
   final DateTime? initialDateTime;
@@ -89,20 +91,21 @@ class _PointSelectorState extends State<PointSelector> {
           onPressed: () {
             final dateTime = _selectedDate;
             if (dateTime != null) {
-              widget.kid.addPointsAtTime(_currentValue, dateTime);
+              widget.kidRepository.addPoints(id: widget.kid.id, points: _currentValue, dateTime: dateTime);
             }
             // Silly side affect for now, assuming if you are doing history, don't assume to give current day as well
             else if (widget.historyUpdates.isEmpty) {
-              widget.kid.points += _currentValue;
+              widget.kidRepository.addPoints(id: widget.kid.id, points: _currentValue);
+              //widget.kid.points += _currentValue;
             }
 
             widget.historyUpdates.forEach((pointHistory) {
               if (pointHistory is MissingPointHistory) {
                 // MissingPointHistory is just a Visual queue, doesn't exist in history so just add it
-                widget.kid
-                    .addPointsAtTime(_currentValue, pointHistory.dateTime);
+                widget.kidRepository.addPoints(id: widget.kid.id, points: _currentValue, dateTime: pointHistory.dateTime);
               } else {
-                widget.kid.updatePoints(pointHistory, _currentValue);
+                widget.kidRepository.updatePoints(id: widget.kid.id, pointHistoryItem: pointHistory, newPoints: _currentValue);
+                //widget.kid.updatePoints(pointHistory, _currentValue);
               }
             });
           },

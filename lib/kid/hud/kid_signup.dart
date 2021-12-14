@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kid_good_good/kid/kid.dart';
+import 'package:uuid/uuid.dart';
+
+const _uuid = Uuid();
 
 class KidSignupForm extends ConsumerStatefulWidget {
   const KidSignupForm({
@@ -64,9 +67,14 @@ class KidSignupFormState extends ConsumerState<KidSignupForm> {
             child: ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  final kid = KidHive(firstName: firstNameController.text)
-                    ..lastName = lastNameController.text
-                    ..registered = true;
+                  final kid = Kid(
+                    id: _uuid.v4(),
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    registered: true,
+                    pointHistory: [],
+                    points: 0,
+                  );
                   ref.read(repositoryProvider).add(kid);
 
                   ScaffoldMessenger.of(context).showSnackBar(

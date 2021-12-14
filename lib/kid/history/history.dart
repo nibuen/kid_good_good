@@ -66,7 +66,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KidAppBar(
+      appBar: UserAppBar(
         title: widget.title,
       ),
       body: Column(
@@ -116,6 +116,7 @@ class PointHistoryList extends ConsumerWidget {
       historyAndMissingDays: historyAndMissingDays,
       missingDaysList: missingDaysList,
       kid: kid,
+      kidRepository: ref.read(repositoryProvider),
     );
   }
 
@@ -157,10 +158,12 @@ class HistoryList extends StatefulWidget {
     required this.historyAndMissingDays,
     required this.missingDaysList,
     required this.kid,
+    required this.kidRepository,
     Key? key,
   }) : super(key: key);
 
   final Kid kid;
+  final KidRepository kidRepository;
   final List<PointHistory> historyAndMissingDays;
   final List<PointHistory> missingDaysList;
 
@@ -209,7 +212,8 @@ class _HistoryListState extends State<HistoryList> {
               setState(() {
                 for (int i = itemsSelected.length - 1; i >= 0; i--) {
                   if (itemsSelected[i]) {
-                    widget.kid.deleteHistory(widget.historyAndMissingDays[i]);
+                    widget.kidRepository.deleteHistory(
+                        kid: widget.kid, item: widget.historyAndMissingDays[i]);
                     itemsSelected.removeAt(i);
                   }
                 }

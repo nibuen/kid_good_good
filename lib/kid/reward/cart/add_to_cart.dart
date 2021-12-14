@@ -9,10 +9,12 @@ class AddToCart extends StatelessWidget {
     Key? key,
     required this.reward,
     required this.kid,
+    required this.kidRepository,
   }) : super(key: key);
 
   final Reward reward;
   final Kid kid;
+  final KidRepository kidRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,8 @@ class AddToCart extends StatelessWidget {
                             MaterialStateProperty.all(reward.color),
                       ),
                       onPressed: () {
-                        if (!kid.claimReward(reward)) {
+                        if (!kidRepository.claimReward(
+                            kid: kid, reward: reward)) {
                           // TODO show error if couldn't claim
                         } else {
                           Navigator.pop(context);

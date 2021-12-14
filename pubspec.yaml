@@ -24,32 +24,37 @@ dependencies:
   flutter:
     sdk: flutter
 
-  sentry_flutter: ^6.1.2
+  sentry_flutter: ^6.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
 
   intl: ^0.17.0
 
   flutter_svg: ^0.22.0
   numberpicker: ^2.1.1
-  flutter_riverpod: ^1.0.1
+  flutter_riverpod: ^1.0.2
+
+  uuid: ^3.0.4
 
   hive: ^2.0.4
   hive_flutter: ^1.1.0
 
   flutter_local_notifications: 9.0.0
 
-  fl_chart: ^0.40.2
-  syncfusion_flutter_datepicker: ^19.3.56
+  fl_chart: ^0.40.5
+  syncfusion_flutter_datepicker: ^19.3.57
+
+  freezed_annotation:
+  mockito: ^5.0.16
 
 dev_dependencies:
   hive_generator: ^1.1.1
-  build_runner: ^2.1.2
+  build_runner: ^2.1.5
+  freezed: ^1.0.2
   flutter_test:
     sdk: flutter
-  test: ^1.17.10
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

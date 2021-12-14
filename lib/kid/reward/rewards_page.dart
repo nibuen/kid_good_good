@@ -25,7 +25,7 @@ class _RewardsPageState extends State<RewardsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KidAppBar(title: widget.title),
+      appBar: UserAppBar(title: widget.title),
       body: Column(
         children: [
           Expanded(
@@ -136,6 +136,7 @@ class _RewardCard extends ConsumerWidget {
             content: AddToCart(
               reward: reward,
               kid: kid,
+              kidRepository: ref.read(repositoryProvider),
             ),
           );
         },

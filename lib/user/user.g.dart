@@ -1,35 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'kid.dart';
+part of 'user.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class KidsAdapter extends TypeAdapter<_$_Kids> {
+class UsersAdapter extends TypeAdapter<Users> {
   @override
-  final int typeId = 2;
+  final int typeId = 4;
 
   @override
-  _$_Kids read(BinaryReader reader) {
+  Users read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_Kids(
-      kids: (fields[0] as List).cast<Kid>(),
-      selectedKidIndex: fields[1] as dynamic,
-    );
+    return Users()
+      ..users = (fields[0] as List).cast<UserHive>()
+      ..selectedUserIndex = fields[1] as int;
   }
 
   @override
-  void write(BinaryWriter writer, _$_Kids obj) {
+  void write(BinaryWriter writer, Users obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.kids)
+      ..write(obj.users)
       ..writeByte(1)
-      ..write(obj.selectedKidIndex);
+      ..write(obj.selectedUserIndex);
   }
 
   @override
@@ -38,47 +37,41 @@ class KidsAdapter extends TypeAdapter<_$_Kids> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is KidsAdapter &&
+      other is UsersAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
 
-class KidAdapter extends TypeAdapter<_$_Kid> {
+class UserHiveAdapter extends TypeAdapter<UserHive> {
   @override
-  final int typeId = 0;
+  final int typeId = 3;
 
   @override
-  _$_Kid read(BinaryReader reader) {
+  UserHive read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$_Kid(
-      points: fields[0] as int,
-      pointHistory: (fields[1] as List).cast<PointHistory>(),
-      firstName: fields[2] as String,
-      lastName: fields[3] as String?,
-      registered: fields[4] as bool,
-      id: fields[5] as String,
+    return UserHive(
+      firstName: fields[1] as String,
+      lastName: fields[2] as String?,
+      registered: fields[3] as bool,
+      email: fields[4] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, _$_Kid obj) {
+  void write(BinaryWriter writer, UserHive obj) {
     writer
-      ..writeByte(6)
-      ..writeByte(0)
-      ..write(obj.points)
-      ..writeByte(1)
-      ..write(obj.pointHistory)
-      ..writeByte(2)
-      ..write(obj.firstName)
-      ..writeByte(3)
-      ..write(obj.lastName)
       ..writeByte(4)
+      ..writeByte(1)
+      ..write(obj.firstName)
+      ..writeByte(2)
+      ..write(obj.lastName)
+      ..writeByte(3)
       ..write(obj.registered)
-      ..writeByte(5)
-      ..write(obj.id);
+      ..writeByte(4)
+      ..write(obj.email);
   }
 
   @override
@@ -87,7 +80,7 @@ class KidAdapter extends TypeAdapter<_$_Kid> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is KidAdapter &&
+      other is UserHiveAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

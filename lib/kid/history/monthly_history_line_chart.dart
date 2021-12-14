@@ -30,6 +30,9 @@ class MonthlyHistoryLineChart extends StatelessWidget {
           values[element.dateTime.month]! + element.points;
     });
     history.sort();
+    if(history.isEmpty) {
+      return Container();
+    }
 
     final textStyle = const TextStyle(
       color: Color(0xff67727d),

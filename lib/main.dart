@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kid_good_good/user/user.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'app_bar.dart';
@@ -15,10 +16,13 @@ import 'kid/reward/rewards_page.dart';
 
 void main() async {
   await Hive.initFlutter();
+  //await Hive.deleteBoxFromDisk(hiveBoxName);
   Hive
-    ..registerAdapter(KidHiveAdapter())
+    ..registerAdapter(KidAdapter())
     ..registerAdapter(KidsAdapter())
-    ..registerAdapter(PointHistoryAdapter());
+    ..registerAdapter(PointHistoryAdapter())
+    ..registerAdapter(UserHiveAdapter())
+  ..registerAdapter(UsersAdapter());
   await Hive.openBox(hiveBoxName);
 
   await SentryFlutter.init(
@@ -30,8 +34,6 @@ void main() async {
     appRunner: () => runApp(ProviderScope(child: App())),
   );
 }
-
-class Adult {}
 
 final boxProvider = Provider<Box<dynamic>>((ref) {
   final box = Hive.box(hiveBoxName);
@@ -54,13 +56,13 @@ class App extends ConsumerWidget {
       ),
       home: SummaryPage(
         title: 'Summary',
-        kid: ref.watch(selectedKidProvider.notifier),
+        kid: ref.watch(selectedKidProvider),
       ),
       routes: {
         '/rewards': (c) {
           return RewardsPage(
             title: 'Rewards',
-            kid: ref.read(selectedKidProvider.notifier),
+            kid: ref.read(selectedKidProvider),
           );
         },
         '/history': (c) {
@@ -69,7 +71,7 @@ class App extends ConsumerWidget {
               ref.watch(selectedKidProvider);
               return HistoryPage(
                 title: 'History',
-                kid: ref.read(selectedKidProvider.notifier),
+                kid: ref.read(selectedKidProvider),
               );
             },
           );
@@ -77,13 +79,13 @@ class App extends ConsumerWidget {
         '/register_kid': (c) {
           return RegisterKidPage(
             title: 'Register New Child',
-            kid: ref.read(selectedKidProvider.notifier),
+            kid: ref.read(selectedKidProvider),
           );
         },
         '/kid_details': (c) {
           return KidDetailsPage(
             title: 'Details',
-            kid: ref.read(selectedKidProvider.notifier),
+            kid: ref.read(selectedKidProvider),
           );
         },
       },
@@ -109,7 +111,7 @@ class _SummaryPageState extends State<SummaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KidAppBar(
+      appBar: UserAppBar(
         title: widget.title,
       ),
       body: Center(
@@ -183,7 +185,7 @@ class _KidDetailsPageState extends State<KidDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: KidAppBar(
+      appBar: UserAppBar(
         title: widget.title,
       ),
       body: Center(
@@ -214,7 +216,6 @@ class KidsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO This helps selected kid update correctly, should narrow rebuild
     ref.watch(selectedKidProvider);
     final kidsHive = ref.watch(kidsProvider);
     final kids = kidsHive.kids;
@@ -251,7 +252,7 @@ class KidsList extends ConsumerWidget {
           );
         },
         child: KidSummaryTile(
-          kid: Kid(kids[index], ref.read),
+          kid: kids[index],
           icon: selectedIndex == index ? Icons.check : Icons.person,
         ),
       ),

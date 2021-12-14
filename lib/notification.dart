@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kid_good_good/kid/kid.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import 'main.dart';
@@ -16,7 +17,9 @@ final notificationProvider =
     await Navigator.push(
       context,
       MaterialPageRoute<void>(
-          builder: (context) => SummaryPage(title: 'Summary')),
+        builder: (context) => SummaryPage(
+            title: 'Summary', kid: ref.watch(selectedKidProvider)),
+      ),
     );
   };
 

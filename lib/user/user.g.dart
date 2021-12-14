@@ -6,23 +6,24 @@ part of 'user.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UsersAdapter extends TypeAdapter<Users> {
+class UsersAdapter extends TypeAdapter<_$_Users> {
   @override
   final int typeId = 4;
 
   @override
-  Users read(BinaryReader reader) {
+  _$_Users read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Users()
-      ..users = (fields[0] as List).cast<UserHive>()
-      ..selectedUserIndex = fields[1] as int;
+    return _$_Users(
+      users: (fields[0] as List).cast<User>(),
+      selectedUserIndex: fields[1] as dynamic,
+    );
   }
 
   @override
-  void write(BinaryWriter writer, Users obj) {
+  void write(BinaryWriter writer, _$_Users obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
@@ -42,26 +43,26 @@ class UsersAdapter extends TypeAdapter<Users> {
           typeId == other.typeId;
 }
 
-class UserHiveAdapter extends TypeAdapter<UserHive> {
+class UserAdapter extends TypeAdapter<_$_User> {
   @override
   final int typeId = 3;
 
   @override
-  UserHive read(BinaryReader reader) {
+  _$_User read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return UserHive(
+    return _$_User(
       firstName: fields[1] as String,
       lastName: fields[2] as String?,
       registered: fields[3] as bool,
-      email: fields[4] as String?,
+      id: fields[4] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, UserHive obj) {
+  void write(BinaryWriter writer, _$_User obj) {
     writer
       ..writeByte(4)
       ..writeByte(1)
@@ -71,7 +72,7 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
       ..writeByte(3)
       ..write(obj.registered)
       ..writeByte(4)
-      ..write(obj.email);
+      ..write(obj.id);
   }
 
   @override
@@ -80,7 +81,7 @@ class UserHiveAdapter extends TypeAdapter<UserHive> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserHiveAdapter &&
+      other is UserAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

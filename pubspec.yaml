@@ -35,16 +35,13 @@ dependencies:
   flutter_svg: ^0.22.0
   numberpicker: ^2.1.1
   flutter_riverpod: ^1.0.2
-
   uuid: ^3.0.4
-
   hive: ^2.0.4
   hive_flutter: ^1.1.0
-
   flutter_local_notifications: 9.0.0
-
   fl_chart: ^0.40.5
   syncfusion_flutter_datepicker: ^19.3.57
+  google_fonts: ^2.0.0
 
   freezed_annotation:
   mockito: ^5.0.16

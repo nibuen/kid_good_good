@@ -51,7 +51,7 @@ class _PointSelectorState extends State<PointSelector> {
             children: [
               Card(
                 elevation: 3.5,
-                color: Colors.blueGrey[100],
+                color: Theme.of(context).colorScheme.surface,
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: NumberPicker(
@@ -70,42 +70,49 @@ class _PointSelectorState extends State<PointSelector> {
             ],
           ),
         ),
-        SizedBox(
-          width: 300,
-          height: 300,
-          child: SfDateRangePicker(
-            initialSelectedDate: _selectedDate,
-            onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-              _selectedDate = args.value as DateTime;
-              debugPrint("new selectedDate: $_selectedDate");
-            },
-            selectionMode: DateRangePickerSelectionMode.single,
-            showTodayButton: true,
-            initialSelectedRange: PickerDateRange(
-                DateTime.now().subtract(const Duration(days: 4)),
-                DateTime.now().add(const Duration(days: 3))),
+        if (widget.historyUpdates.length <= 1)
+          SizedBox(
+            width: 300,
+            height: 300,
+            child: SfDateRangePicker(
+              initialSelectedDate: _selectedDate,
+              onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+                _selectedDate = args.value as DateTime;
+                debugPrint("new selectedDate: $_selectedDate");
+              },
+              selectionMode: DateRangePickerSelectionMode.single,
+              showTodayButton: true,
+              initialSelectedRange: PickerDateRange(
+                  DateTime.now().subtract(const Duration(days: 4)),
+                  DateTime.now().add(const Duration(days: 3))),
+            ),
           ),
-        ),
         SizedBox(height: 12),
         FloatingActionButton.small(
           onPressed: () {
-            final dateTime = _selectedDate;
-            if (dateTime != null) {
-              widget.kidRepository.addPoints(id: widget.kid.id, points: _currentValue, dateTime: dateTime);
-            }
-            // Silly side affect for now, assuming if you are doing history, don't assume to give current day as well
-            else if (widget.historyUpdates.isEmpty) {
-              widget.kidRepository.addPoints(id: widget.kid.id, points: _currentValue);
-              //widget.kid.points += _currentValue;
+            final selectedDateTime = _selectedDate;
+            if (selectedDateTime != null) {
+              widget.kidRepository.addPoints(
+                  id: widget.kid.id,
+                  points: _currentValue,
+                  dateTime: selectedDateTime);
+            } else if (widget.historyUpdates.isEmpty) {
+              widget.kidRepository
+                  .addPoints(id: widget.kid.id, points: _currentValue);
             }
 
             widget.historyUpdates.forEach((pointHistory) {
               if (pointHistory is MissingPointHistory) {
                 // MissingPointHistory is just a Visual queue, doesn't exist in history so just add it
-                widget.kidRepository.addPoints(id: widget.kid.id, points: _currentValue, dateTime: pointHistory.dateTime);
+                widget.kidRepository.addPoints(
+                    id: widget.kid.id,
+                    points: _currentValue,
+                    dateTime: pointHistory.dateTime);
               } else {
-                widget.kidRepository.updatePoints(id: widget.kid.id, pointHistoryItem: pointHistory, newPoints: _currentValue);
-                //widget.kid.updatePoints(pointHistory, _currentValue);
+                widget.kidRepository.updatePoints(
+                    id: widget.kid.id,
+                    pointHistoryItem: pointHistory,
+                    newPoints: _currentValue);
               }
             });
           },

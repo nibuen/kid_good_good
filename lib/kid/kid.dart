@@ -11,7 +11,6 @@ import 'history/history.dart';
 import 'hive/hive_object_wrapper.dart';
 
 part 'kid.freezed.dart';
-
 part 'kid.g.dart';
 
 const _uuid = Uuid();
@@ -57,9 +56,6 @@ class KidRepository {
     kids.add(kid);
     kids.select(kids.length - 1); // select one just added
     kids.save();
-    //final notifier = _read(kidsProvider.notifier);
-    //final box = _read(boxProvider);
-    //final kids = box.get(KidsTypeId, defaultValue: Kids()) as Kids;
   }
 
   select(Kid kid) {
@@ -94,10 +90,6 @@ class KidRepository {
       required int newPoints}) {
     _read(kidsProvider.notifier).updatePoints(
         id: id, pointHistoryItem: pointHistoryItem, newPoints: newPoints);
-
-    /// TODO
-    // _read(kidsProvider.notifier)
-    //     .updatePoints(id: id, pointHistoryItem: pointHistoryItem);
   }
 
   Kid getKid(String id) {
@@ -231,42 +223,6 @@ class KidsState extends StateNotifier<Kids> {
     );
     save();
   }
-
-// bool updatePoints(
-//     {required String id, required PointHistory pointHistoryItem}) {
-//   final Kid kid = state.kids.firstWhere((element) => element.id == id);
-//   final index = kid.pointHistory.indexOf(pointHistoryItem);
-//   final originalhistory = kid.pointHistory[index];
-//
-//   kid.pointHistory[index] =
-//   if (index == -1) return false;
-//
-//   state = state.copyWith(
-//   );
-//
-//   return true;
-// }
-
-//   /// Returns false if [pointHistory] is not found.
-//   bool updatePoints(PointHistory pointHistory, int value) {
-//     final index = state.pointHistory.indexOf(pointHistory);
-//     if (index == -1) return false;
-//
-//     state = state.copyWith(
-//       pointHistory: state.pointHistory
-//         ..[index] =
-//             PointHistory(dateTime: pointHistory.dateTime, points: value),
-//     );
-
-// updateKid(Kid kid) {
-//   // TODO replace the name match with a GUID, etc.
-//   state = state.copyWith(kids: [
-//     ...state.kids
-//       ..[state.kids.indexWhere((element) =>
-//           element.firstName == kid.firstName &&
-//           element.lastName == kid.lastName)] = kid,
-//   ]);
-// }
 }
 
 @freezed
@@ -290,102 +246,3 @@ class Kid with _$Kid {
     @HiveField(5) required String id,
   }) = _Kid;
 }
-
-// class KidState extends StateNotifier<Kid> {
-//   KidState(Kid kid, this._read) : super(kid);
-//
-//   final Reader _read;
-//
-//   int get points => state.points;
-//
-//   set points(int value) {
-//     state = state.copyWith(
-//       points: value,
-//       pointHistory: [
-//         ...pointHistory,
-//         PointHistory(dateTime: DateTime.now(), points: value - state.points)
-//       ],
-//     );
-//     _read(kidsProvider.notifier)
-//       ..updateKid(state)
-//       ..save();
-//   }
-//
-//   void addPointsWithReward(int value, Reward reward) {
-//     state = state.copyWith(
-//       points: state.points + value,
-//       pointHistory: [
-//         ...pointHistory,
-//         PointHistory(
-//           dateTime: DateTime.now(),
-//           points: value,
-//           reward: reward,
-//         ),
-//       ],
-//     );
-//     _read(kidsProvider.notifier)
-//       ..updateKid(state)
-//       ..save();
-//   }
-//
-//   void addPointsAtTime(int value, DateTime dateTime) {
-//     state = state.copyWith(
-//       points: state.points + value,
-//       pointHistory: [
-//         ...pointHistory,
-//         PointHistory(dateTime: dateTime, points: value)
-//       ],
-//     );
-//     _read(kidsProvider.notifier)
-//       ..updateKid(state)
-//       ..save();
-//   }
-//
-//   /// Returns false if [pointHistory] is not found.
-//   bool updatePoints(PointHistory pointHistory, int value) {
-//     final index = state.pointHistory.indexOf(pointHistory);
-//     if (index == -1) return false;
-//
-//     state = state.copyWith(
-//       pointHistory: state.pointHistory
-//         ..[index] =
-//             PointHistory(dateTime: pointHistory.dateTime, points: value),
-//     );
-//
-//     _read(kidsProvider.notifier)
-//       ..updateKid(state)
-//       ..save();
-//     return true;
-//   }
-//
-//   String get firstName => state.firstName;
-//
-//   String? get lastName => state.lastName;
-//
-//   bool get registered => state.registered;
-//
-//   List<PointHistory> get pointHistory => state.pointHistory;
-//
-//   /// Returns true if reward can be claimed, false otherwise.
-//   bool claimReward(Reward reward) {
-//     if (points >= reward.cost) {
-//       addPointsWithReward(
-//         -reward.cost,
-//         reward,
-//       );
-//       return true;
-//     }
-//
-//     return false;
-//   }
-//
-//   void deleteHistory(PointHistory item) {
-//     if (pointHistory.remove(item)) {
-//       // go directly to inner state so we don't add to history
-//       state = state.copyWith(points: state.points - item.points);
-//       _read(kidsProvider.notifier)
-//         ..updateKid(state)
-//         ..save();
-//     }
-//   }
-// }

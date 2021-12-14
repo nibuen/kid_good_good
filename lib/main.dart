@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kid_good_good/theme.dart';
 import 'package:kid_good_good/user/user.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -21,8 +22,8 @@ void main() async {
     ..registerAdapter(KidAdapter())
     ..registerAdapter(KidsAdapter())
     ..registerAdapter(PointHistoryAdapter())
-    ..registerAdapter(UserHiveAdapter())
-  ..registerAdapter(UsersAdapter());
+    ..registerAdapter(UserAdapter())
+    ..registerAdapter(UsersAdapter());
   await Hive.openBox(hiveBoxName);
 
   await SentryFlutter.init(
@@ -50,10 +51,7 @@ class App extends ConsumerWidget {
     return MaterialApp(
       title: 'Kid Good Good',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        secondaryHeaderColor: Colors.orangeAccent,
-      ),
+      theme: KidGoodGoodThemeData.darkThemeData,
       home: SummaryPage(
         title: 'Summary',
         kid: ref.watch(selectedKidProvider),
@@ -83,6 +81,12 @@ class App extends ConsumerWidget {
           );
         },
         '/kid_details': (c) {
+          return KidDetailsPage(
+            title: 'Details',
+            kid: ref.read(selectedKidProvider),
+          );
+        },
+        '/user_select': (c) {
           return KidDetailsPage(
             title: 'Details',
             kid: ref.read(selectedKidProvider),

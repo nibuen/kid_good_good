@@ -408,7 +408,7 @@ class _SelectedCounterState extends State<SelectedCounter> {
         ),
         const PopupMenuItem<Selections>(
           value: Selections.deselect_all,
-          child: Text('Deselect All'),
+          child: Text('Clear All'),
         ),
       ],
     );

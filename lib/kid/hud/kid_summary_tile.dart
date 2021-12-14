@@ -34,14 +34,14 @@ class KidSummaryTile extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.only(bottom: 4),
-                child: Icon(Icons.star, color: Colors.indigoAccent),
+                child: Icon(Icons.star, color: Theme.of(context).colorScheme.secondary),
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: Colors.green.withOpacity(0.25),
                       spreadRadius: -1,
                       blurRadius: 6,
-                      offset: Offset(0, 0), // changes position of shadow
+                      offset: const Offset(0, -3), // changes position of shadow
                     ),
                   ],
                 )),

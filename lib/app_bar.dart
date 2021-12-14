@@ -60,7 +60,6 @@ class _KidAvatar extends ConsumerWidget {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, "user_select"),
       child: CircleAvatar(
-        foregroundColor: Colors.deepOrange,
         child: Text("${ref.watch(selectedKidProvider).firstName}"),
       ),
     );
@@ -75,7 +74,6 @@ class _UserAvatar extends ConsumerWidget {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, "user_select"),
       child: CircleAvatar(
-        foregroundColor: Colors.deepOrange,
         child: Text("${ref.watch(selectedUserProvider).firstName}"),
       ),
     );
